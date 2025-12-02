@@ -1,13 +1,10 @@
 package com.multi.travel.auth.jwt.service;
 
 import com.multi.travel.auth.jwt.domain.RefreshToken;
-import com.multi.travel.common.exception.RefreshTokenException;
-import com.multi.travel.common.exception.TokenException;
-import com.multi.travel.auth.jwt.TokenProvider;
 import com.multi.travel.auth.jwt.dto.TokenDto;
 import com.multi.travel.auth.jwt.repository.RefreshTokenRepository;
-import com.multi.travel.member.entity.Member;
-import com.multi.travel.member.repository.MemberRepository;
+import com.multi.travel.common.exception.RefreshTokenException;
+import com.multi.travel.common.exception.TokenException;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,7 +26,7 @@ public class TokenService {
 
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
-    private final MemberRepository memberRepository;
+    //private final MemberRepository memberRepository;
 
     /* ===========================================================
        ✅ 1️⃣ 로그인 시 : AccessToken + RefreshToken 최초 발급
@@ -134,10 +131,10 @@ public class TokenService {
     private String createRefreshToken(String email, List<String> roles) {
         if (roles == null || roles.isEmpty()) {
             // DB에서 role을 가져와서 fallback 시키기
-            String role = memberRepository.findByEmail(email)
-                    .map(Member::getRole)
-                    .orElse("ROLE_USER");
-            roles = List.of(role);
+            //String role = memberRepository.findByEmail(email)
+            //        .map(Member::getRole)
+            //        .orElse("ROLE_USER");
+            //roles = List.of(role);
         }
         return tokenProvider.generateToken(email, roles, "R");
     }
