@@ -1,4 +1,4 @@
-package com.multi.travel.auth.jwt;
+package com.multi.travel.auth.jwt.service;
 
 import io.jsonwebtoken.security.Keys;
 import lombok.Getter;

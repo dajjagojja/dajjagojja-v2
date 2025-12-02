@@ -3,8 +3,8 @@ package com.multi.travel.auth.config;
 
 import com.multi.travel.auth.handler.JwtAcessDeniedHandler;
 import com.multi.travel.auth.handler.JwtAuthenticationEntrypoint;
-import com.multi.travel.auth.jwt.JwtFilter;
-import com.multi.travel.auth.jwt.TokenProvider;
+import com.multi.travel.auth.jwt.service.JwtFilter;
+import com.multi.travel.auth.jwt.service.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
