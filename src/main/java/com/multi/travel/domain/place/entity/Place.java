@@ -8,26 +8,36 @@ package com.multi.travel.domain.place.entity;
  * @since       : 25. 12. 1. 월요일
  */
 
+import com.multi.travel.domain.category.entity.Category;
+import com.multi.travel.domain.place.enums.PlaceType;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "tb_plc")
-@Data
+@Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString
 public class Place {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(name = "content_id", unique = true)
     private Long contentId;
+
+    @Column(name = "place_type")
+    @Enumerated(EnumType.STRING)
+    private PlaceType placeType;
+
 
     @Column
     private String title;
@@ -48,36 +58,38 @@ public class Place {
     private BigDecimal mapy;  // 위도
 
     @Column
-    private String placeType;
-
-    @Column
     private String parking;
 
-    @Column
+    @Column(name = "time_available")
     private String timeAvailable;
 
-    @Column
+    @Column(name = "open_time")
     private String openTime;
 
-    @Column
+    @Column(name = "rest_date")
     private String restDate;
 
-    @Column
+    @Column(name = "best_menu")
     private String bestMenu;
 
-    @Column
+    @Column(name = "check_in")
     private String checkIn;
 
-    @Column
+    @Column(name = "check_out")
     private String checkOut;
 
-    @Column
-    private Date createdAt;
+    @CreatedDate
+    @Column(name = "create_at", updatable = false)
+    private LocalDateTime createdAt;
 
-    @Column
-    private Date updatedAt;
+    @Column(name = "update_at")
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
 
-    @Column
+    @Column(name = "view_count")
     private int viewCount;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_code")
+    private Category category;
 }
