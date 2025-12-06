@@ -4,7 +4,6 @@ package com.multi.travel.auth.config;
 import com.multi.travel.auth.handler.JwtAcessDeniedHandler;
 import com.multi.travel.auth.handler.JwtAuthenticationEntrypoint;
 import com.multi.travel.auth.jwt.service.JwtFilter;
-import com.multi.travel.auth.jwt.service.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,7 +28,6 @@ import java.util.List;
 @EnableMethodSecurity
 public class SecurityConfigjwt {
 
-    private final TokenProvider tokenProvider;
     private final JwtAcessDeniedHandler jwtAcessDeniedHandler;
     private final JwtFilter jwtFilter;
 

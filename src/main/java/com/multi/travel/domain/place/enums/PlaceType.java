@@ -12,5 +12,5 @@ package com.multi.travel.domain.place.enums;
 public enum PlaceType {
     TOUR,      // 관광지
     FOOD,      // 음식점
-    ACCOM      // 숙박
+    ACC      // 숙박
 }

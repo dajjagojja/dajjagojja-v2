@@ -37,13 +37,12 @@ public class PlaceImage {
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
-    @Column(name = "is_main", length = 1)
-    private String isMain;
+    @Column(name = "is_main")
+    private boolean isMain;
 
-    @Column(name = "sort_order")
-    private Integer sortOrder;
 
     @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
 }
