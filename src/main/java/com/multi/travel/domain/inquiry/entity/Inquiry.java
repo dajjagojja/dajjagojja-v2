@@ -10,6 +10,7 @@ package com.multi.travel.domain.inquiry.entity;
 
 import com.multi.travel.domain.inquiry.enums.InquiryType;
 import com.multi.travel.domain.inquiry.enums.StatusType;
+import com.multi.travel.domain.member.entity.Member;
 import com.multi.travel.domain.place.entity.Place;
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,7 +24,6 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "tb_inq")
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -33,9 +33,9 @@ public class Inquiry {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //@ManyToOne(fetch = FetchType.LAZY)
-    //@JoinColumn(name = "member_id")
-    //private Member questioner;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "inquirer_id")
+    private Member inquirer;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "place_id")
@@ -50,9 +50,9 @@ public class Inquiry {
     @Column(name = "answer_content", columnDefinition = "TEXT")
     private String answerContent;
 
-    //@ManyToOne(fetch = FetchType.LAZY)
-    //@JoinColumn(name = "answer_id")
-    //private Member author;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "responder_id")
+    private Member responder;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -61,14 +61,26 @@ public class Inquiry {
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     private StatusType status = StatusType.PENDING;
 
 
     @CreatedDate
-    @Column(name = "create_at", updatable = false)
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "update_at")
+    @Column(name = "updated_at")
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    public void updateAnswer(String answer, Member responder) {
+        this.answerContent = answer;
+        this.responder = responder;
+        this.status = StatusType.COMPLETED;
+    }
+
+    public void updateStatus(StatusType status) {
+        this.status = status;
+    }
+
 }

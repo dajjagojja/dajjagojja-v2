@@ -8,6 +8,7 @@ package com.multi.travel.domain.favorite.entity;
  * @since       : 25. 12. 2. 화요일
  */
 
+import com.multi.travel.domain.member.entity.Member;
 import com.multi.travel.domain.place.entity.Place;
 import jakarta.persistence.*;
 import lombok.*;
@@ -32,9 +33,9 @@ public class Favorite {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //@ManyToOne(fetch = FetchType.LAZY)
-    //@JoinColumn(name = "member_id")
-    //private Member member;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "place_id")

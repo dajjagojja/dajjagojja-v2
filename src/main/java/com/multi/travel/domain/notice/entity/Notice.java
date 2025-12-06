@@ -8,6 +8,7 @@ package com.multi.travel.domain.notice.entity;
  * @since       : 25. 12. 2. 화요일
  */
 
+import com.multi.travel.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -36,18 +37,18 @@ public class Notice {
     private String content;
 
     @CreatedDate
-    @Column(name = "create_at", updatable = false)
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "update_at")
+    @Column(name = "updated_at")
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
 
-    @Column(name = "author_name")
-    private String authorName;
+    @Column(name = "admin_name")
+    private String adminName;
 
-    //@ManyToOne(fetch = FetchType.LAZY)
-    //@JoinColumn(name = "member_id")
-    //private Member member;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "admin_id")
+    private Member member;
 }
