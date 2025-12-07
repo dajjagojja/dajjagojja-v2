@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class PlaceListReqDTO {
-    private Long categoryId;
+    private String categoryCode;
 
     private String keyword = "";
 
