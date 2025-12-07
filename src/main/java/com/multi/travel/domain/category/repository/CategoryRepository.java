@@ -12,5 +12,10 @@ package com.multi.travel.domain.category.repository;
 import com.multi.travel.domain.category.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface CategoryRepository extends JpaRepository<Category, String> {
+    List<Category> findByParentIsNullAndDeletedFalse();
+
+    List<Category> findByParent_CategoryCodeAndDeletedFalse(String categoryCode);
 }
