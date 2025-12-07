@@ -26,6 +26,8 @@ import java.util.List;
 @Builder
 public class PlaceCreateReqDTO {
     private Long id;
+
+    @Builder.Default
     private Long contentId = -1L;
     private PlaceType placeType;
     private String title;

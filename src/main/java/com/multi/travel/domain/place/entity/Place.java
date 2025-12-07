@@ -104,6 +104,7 @@ public class Place {
     private Category category;
 
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<PlaceImage> images = new ArrayList<>();
 
     public PlaceImage getMainImage() {
