@@ -41,7 +41,7 @@ public class PlaceService {
         Pageable pageable = PageRequest.of(req.getPage(), req.getSize(), getSort(req.getSort()));
 
         Page<Place> result = placeRepository.searchPlaces(
-                req.getCategoryId(),
+                req.getCategoryCode(),
                 req.getKeyword(),
                 pageable
         );

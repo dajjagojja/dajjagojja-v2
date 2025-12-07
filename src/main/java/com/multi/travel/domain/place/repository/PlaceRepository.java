@@ -26,7 +26,18 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
     void incrementViewCount(@Param("id") Long id);
 
 
-    Page<Place> searchPlaces(Long categoryId, String keyword, Pageable pageable);
+    @Query("""
+            SELECT p
+    FROM Place p
+    WHERE (:categoryCode IS NULL OR p.category.categoryCode = :categoryCode)
+      AND (:keyword IS NULL OR p.title LIKE %:keyword%)
+    """)
+    Page<Place> searchPlaces(
+            @Param("categoryCode") String categoryCode,
+            @Param("keyword") String keyword,
+            Pageable pageable
+    );
+
 
 
     @Query(value = """
