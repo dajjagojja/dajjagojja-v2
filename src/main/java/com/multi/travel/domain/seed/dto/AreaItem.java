@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 /**
  * Please explain the class!!!
  *
@@ -32,14 +34,27 @@ public class AreaItem {
     private String title;
 
     @JsonProperty("mapy")
-    private Double mapY;   // latitude
+    private String mapY;   // latitude (raw)
 
     @JsonProperty("mapx")
-    private Double mapX;   // longitude
+    private String mapX;   // longitude (raw)
 
     @JsonProperty("firstimage")
     private String firstImage;
 
     @JsonProperty("modifiedtime")
     private String modifiedTime;
+
+
+    public BigDecimal getLatitude() {
+        return mapY != null && !mapY.isBlank()
+                ? new BigDecimal(mapY)
+                : null;
+    }
+
+    public BigDecimal getLongitude() {
+        return mapX != null && !mapX.isBlank()
+                ? new BigDecimal(mapX)
+                : null;
+    }
 }

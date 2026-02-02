@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -54,11 +55,11 @@ public class PlaceSeed {
     @Column(nullable = false, length = 200)
     private String title;
 
-    @Column(precision = 10, scale = 7)
-    private Double latitude;
+    @Column(name = "latitude", precision = 10, scale = 7)
+    private BigDecimal latitude;
 
-    @Column(precision = 10, scale = 7)
-    private Double longitude;
+    @Column(name = "longitude", precision = 10, scale = 7)
+    private BigDecimal longitude;
 
     @Column(length = 500)
     private String thumbnailUrl;
@@ -83,8 +84,8 @@ public class PlaceSeed {
             Integer areaCode,
             Integer sigunguCode,
             String title,
-            Double latitude,
-            Double longitude,
+            BigDecimal latitude,
+            BigDecimal longitude,
             String thumbnailUrl,
             LocalDateTime sourceModifiedAt,
             SeedStatus status,
@@ -101,9 +102,10 @@ public class PlaceSeed {
         this.thumbnailUrl = thumbnailUrl;
         this.sourceModifiedAt = sourceModifiedAt;
         this.status = status;
-        this.collectedAt = collectedAt;
+        this.collectedAt = collectedAt != null ? collectedAt : LocalDateTime.now();
         this.failReason = failReason;
     }
+
 
     public void markConverted() {
         this.status = SeedStatus.CONVERTED;
