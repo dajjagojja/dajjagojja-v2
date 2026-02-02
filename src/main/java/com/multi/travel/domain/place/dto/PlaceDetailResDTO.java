@@ -10,7 +10,7 @@ package com.multi.travel.domain.place.dto;
 
 
 import com.multi.travel.domain.place.entity.Place;
-import com.multi.travel.domain.place_img.dto.PlaceImageResDTO;
+import com.multi.travel.domain.place.img.dto.PlaceImageResDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.multi.travel.domain.place_img.dto;
+package com.multi.travel.domain.place.img.dto;
 
 /*
  * Please explain the class!!!
@@ -10,7 +10,7 @@ package com.multi.travel.domain.place_img.dto;
 
 
 import com.multi.travel.domain.place.entity.Place;
-import com.multi.travel.domain.place_img.entity.PlaceImage;
+import com.multi.travel.domain.place.img.entity.PlaceImage;
 
 public class PlaceImageReqDTO {
     private String imageUrl;

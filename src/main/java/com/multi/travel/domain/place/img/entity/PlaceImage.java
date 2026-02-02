@@ -1,4 +1,4 @@
-package com.multi.travel.domain.place_img.entity;
+package com.multi.travel.domain.place.img.entity;
 
 /*
  * Please explain the class!!!

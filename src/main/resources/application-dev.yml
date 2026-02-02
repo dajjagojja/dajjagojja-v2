@@ -60,3 +60,6 @@ image:
     add-resource-handler: /reviewimgs/**
     image-dir: /Users/chlal/Desktop/upload/reviewimgs/
     image-url: http://localhost:8090/reviewimgs/
+
+tour-api:
+  service-key: ${TOUR_API_KEY}
