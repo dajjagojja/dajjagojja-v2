@@ -1,13 +1,5 @@
 package com.multi.travel.auth.controller;
 
-/*
- * Please explain the class!!!
- *
- * @filename    : AuthController
- * @author      : Kim hayeon
- * @since       : 25. 12. 1. 월요일
- */
-
 import com.multi.travel.auth.jwt.dto.TokenDto;
 import com.multi.travel.common.ResponseDto;
 import com.multi.travel.domain.member.dto.LoginRequestDto;
@@ -23,6 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import static org.springframework.http.ResponseEntity.ok;
 
+/**
+ * Please explain the class!!!
+ *
+ * @author : Choi MinHyeok
+ * @filename : AutuController
+ * @since : 26. 2. 2. 월요일
+ **/
+
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/auth")
@@ -31,10 +32,10 @@ public class AuthController {
     private final MemberService memberService;
 
     @PostMapping("/signup")
-    public ResponseEntity<ResponseDto> signup(@RequestBody SignUpRequestDto requestDto){
+    public ResponseEntity<ResponseDto> signup(@RequestBody SignUpRequestDto requestDto) {
         memberService.signUp(requestDto);
 
-        return ok(new ResponseDto(HttpStatus.CREATED, "회원가입 성공",null));
+        return ok(new ResponseDto(HttpStatus.CREATED, "회원가입 성공", null));
     }
 
     @PostMapping("/login")
@@ -43,7 +44,4 @@ public class AuthController {
 
         return ResponseEntity.ok(tokenDto);
     }
-
-
-
 }

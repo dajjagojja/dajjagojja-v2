@@ -1,0 +1,15 @@
+server:
+  port: 8090
+
+spring:
+  profiles:
+    active: local   # 기본 실행 프로필
+
+springdoc:
+  group-configs:
+    - group: all
+      paths-to-match: /**
+
+logging:
+  level:
+    root: INFO
