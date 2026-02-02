@@ -12,7 +12,7 @@ import com.multi.travel.domain.category.entity.Category;
 import com.multi.travel.domain.place.dto.PlaceUpdateReqDTO;
 import com.multi.travel.domain.place.enums.PlaceStatus;
 import com.multi.travel.domain.place.enums.PlaceType;
-import com.multi.travel.domain.place_img.entity.PlaceImage;
+import com.multi.travel.domain.place.img.entity.PlaceImage;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;

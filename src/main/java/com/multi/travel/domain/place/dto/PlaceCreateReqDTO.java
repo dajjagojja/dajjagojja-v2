@@ -11,7 +11,7 @@ package com.multi.travel.domain.place.dto;
 import com.multi.travel.domain.category.entity.Category;
 import com.multi.travel.domain.place.entity.Place;
 import com.multi.travel.domain.place.enums.PlaceType;
-import com.multi.travel.domain.place_img.dto.PlaceImageReqDTO;
+import com.multi.travel.domain.place.img.dto.PlaceImageReqDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.multi.travel.domain.place_img.repository;
+package com.multi.travel.domain.place.img.repository;
 
 /*
  * Please explain the class!!!
@@ -9,7 +9,7 @@ package com.multi.travel.domain.place_img.repository;
  */
 
 
-import com.multi.travel.domain.place_img.entity.PlaceImage;
+import com.multi.travel.domain.place.img.entity.PlaceImage;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PlaceImageRepository extends JpaRepository<PlaceImage, Long> {
