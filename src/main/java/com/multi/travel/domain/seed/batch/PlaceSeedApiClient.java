@@ -1,5 +1,6 @@
 package com.multi.travel.domain.seed.batch;
 
+import com.multi.travel.common.exception.PlaceSeedApiException;
 import com.multi.travel.domain.seed.dto.AreaBasedResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,11 +48,7 @@ public class PlaceSeedApiClient {
         try {
             return restTemplate.getForObject(url, AreaBasedResponse.class);
         } catch (Exception e) {
-            throw new PlaceSeedApiException(
-                    "Seed API fetch failed (area=%d, type=%d, page=%d)"
-                            .formatted(areaCode, contentTypeId, pageNo),
-                    e
-            );
+            throw new PlaceSeedApiException(e);
         }
     }
 }
