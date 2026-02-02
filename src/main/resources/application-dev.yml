@@ -1,0 +1,62 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  datasource:
+    url: ${DB_DEV_URL}
+    username: ${DB_DEV_USER}
+    password: ${DB_DEV_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: false
+        show_sql: false
+
+logging:
+  level:
+    root: INFO
+    org.springframework.security: INFO
+
+# ===============================
+# JWT 설정
+# ===============================
+jwt:
+  secret: ${JWT_SECRET}
+  issuer: ${JWT_ISSUER}
+  access-token-expire-time: 1800000    # 30분
+  refresh-token-expire-time: 1209600000 # 14일
+
+# ===============================
+# 외부 API Key
+# ===============================
+api:
+  secret: ${API_SECRET}
+
+gemini:
+  api-key: ${GEMINI_API_KEY}
+
+kakao:
+  map:
+    api-key: ${KAKAO_MAP_API_KEY}
+
+# ===============================
+# 이미지 업로드(각자 자신 환경으로 변경 필수)
+# ===============================
+image:
+  review:
+    add-resource-locations: file:/Users/chlal/Desktop/upload/reviewimgs/
+    add-resource-handler: /reviewimgs/**
+    image-dir: /Users/chlal/Desktop/upload/reviewimgs/
+    image-url: http://localhost:8090/reviewimgs/
