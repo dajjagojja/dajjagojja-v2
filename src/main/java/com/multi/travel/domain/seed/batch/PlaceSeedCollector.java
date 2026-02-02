@@ -26,7 +26,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PlaceSeedCollector {
 
-    private static final int NUM_OF_ROWS = 100;
+    private static final int NUM_OF_ROWS = 1000;
     private static final DateTimeFormatter MODIFIED_TIME_FORMATTER =
             DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
