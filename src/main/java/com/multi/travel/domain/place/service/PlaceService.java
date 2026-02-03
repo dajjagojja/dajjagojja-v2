@@ -50,11 +50,11 @@ public class PlaceService {
     }
 
     @Transactional(readOnly = true)
-    public PlaceDetailResDTO getPlace(Long id) {
-        Place place = placeRepository.findById(id)
+    public PlaceDetailResDTO getPlace(Long seedId) {
+        Place place = placeRepository.findById(seedId)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
-                        "해당 장소를 찾을 수 없습니다. id=" + id
+                        "해당 장소를 찾을 수 없습니다. seedId=" + seedId
                 ));
 
         return PlaceDetailResDTO.from(place);

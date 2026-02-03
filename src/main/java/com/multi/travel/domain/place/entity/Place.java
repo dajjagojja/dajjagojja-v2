@@ -10,9 +10,11 @@ package com.multi.travel.domain.place.entity;
 
 import com.multi.travel.domain.category.entity.Category;
 import com.multi.travel.domain.place.dto.PlaceUpdateReqDTO;
+import com.multi.travel.domain.place.enums.PlaceDataSource;
 import com.multi.travel.domain.place.enums.PlaceStatus;
 import com.multi.travel.domain.place.enums.PlaceType;
 import com.multi.travel.domain.place.img.entity.PlaceImage;
+import com.multi.travel.domain.seed.entity.PlaceSeed;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -28,24 +30,33 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "tb_plc")
 @Getter
-@Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 public class Place {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "content_id", unique = true)
+    @Column(name = "seed_id", unique = true)
+    private Long seedId;
+
+    @Column(name = "external_content_id", unique = true)
     private Long contentId;
 
-    @Column(name = "place_type")
+    @Column(name = "content_type_id", nullable = false)
+    private Integer contentTypeId;
+
+    @Column(name = "area_code", nullable = false)
+    private Integer areaCode;
+
+
     @Enumerated(EnumType.STRING)
+    @Column(name = "place_type")
     private PlaceType placeType;
 
-
-    @Column
+    @Column(nullable = false)
     private String title;
 
     @Column
@@ -58,10 +69,10 @@ public class Place {
     private String description;
 
     @Column(precision = 13, scale = 10)
-    private BigDecimal longitude;  // 경도
+    private BigDecimal longitude;
 
     @Column(precision = 13, scale = 10)
-    private BigDecimal latitude;  // 위도
+    private BigDecimal latitude;
 
     @Column
     private String parking;
@@ -84,20 +95,24 @@ public class Place {
     @Column(name = "check_out")
     private String checkOut;
 
-    @CreatedDate
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PlaceStatus status;
 
-    @Column(name = "updated_at")
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "data_source", nullable = false)
+    private PlaceDataSource dataSource;
 
     @Column(name = "view_count")
     private int viewCount;
 
-    @Enumerated(EnumType.STRING)
-    private PlaceStatus status;
+    @CreatedDate
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
 
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_code")
@@ -107,6 +122,58 @@ public class Place {
     @Builder.Default
     private List<PlaceImage> images = new ArrayList<>();
 
+    public static Place fromSeed(PlaceSeed seed) {
+        return Place.builder()
+                .seedId(seed.getId())
+                .contentId(seed.getContentId())
+                .contentTypeId(seed.getContentTypeId())
+                .areaCode(seed.getAreaCode())
+                .title(seed.getTitle())
+                .latitude(seed.getLatitude())
+                .longitude(seed.getLongitude())
+                .status(PlaceStatus.ACTIVE)
+                .dataSource(PlaceDataSource.SEED_LOD)
+                .build();
+    }
+
+
+    public void updateFromLod(PlaceUpdateReqDTO dto) {
+        if (this.dataSource == PlaceDataSource.ADMIN_MANUAL) {
+            return;
+        }
+
+        this.address = updateString(dto.getAddress(), this.address);
+        this.tel = updateString(dto.getTel(), this.tel);
+        this.description = updateString(dto.getDescription(), this.description);
+        updateCommonData(dto);
+    }
+
+    public void updateByAdmin(PlaceUpdateReqDTO dto, Category category) {
+        this.title = updateString(dto.getTitle(), this.title);
+        this.address = updateString(dto.getAddress(), this.address);
+        this.tel = updateString(dto.getTel(), this.tel);
+        this.description = updateString(dto.getDescription(), this.description);
+        this.longitude = updateValue(dto.getLongitude(), this.longitude);
+        this.latitude = updateValue(dto.getLatitude(), this.latitude);
+        updateCommonData(dto);
+
+        if (category != null) {
+            this.category = category;
+        }
+
+        this.dataSource = PlaceDataSource.ADMIN_MANUAL;
+    }
+
+    private void updateCommonData(PlaceUpdateReqDTO dto) {
+        this.parking = updateString(dto.getParking(), this.parking);
+        this.timeAvailable = updateString(dto.getTimeAvailable(), this.timeAvailable);
+        this.openTime = updateString(dto.getOpenTime(), this.openTime);
+        this.restDate = updateString(dto.getRestDate(), this.restDate);
+        this.bestMenu = updateString(dto.getBestMenu(), this.bestMenu);
+        this.checkIn = updateString(dto.getCheckIn(), this.checkIn);
+        this.checkOut = updateString(dto.getCheckOut(), this.checkOut);
+    }
+
     public PlaceImage getMainImage() {
         return images.stream()
                 .filter(PlaceImage::isMain)
@@ -114,39 +181,20 @@ public class Place {
                 .orElse(null);
     }
 
-    public void updateValue(PlaceUpdateReqDTO requestDTO, Category category) {
-
-        this.title = updateString(requestDTO.getTitle(), this.title);
-        this.address = updateString(requestDTO.getAddress(), this.address);
-        this.tel = updateString(requestDTO.getTel(), this.tel);
-        this.description = updateString(requestDTO.getDescription(), this.description);
-
-        this.longitude = updateValue(requestDTO.getLongitude(), this.longitude);
-        this.latitude = updateValue(requestDTO.getLatitude(), this.latitude);
-
-        this.parking = updateString(requestDTO.getParking(), this.parking);
-        this.timeAvailable = updateString(requestDTO.getTimeAvailable(), this.timeAvailable);
-        this.openTime = updateString(requestDTO.getOpenTime(), this.openTime);
-        this.restDate = updateString(requestDTO.getRestDate(), this.restDate);
-        this.bestMenu = updateString(requestDTO.getBestMenu(), this.bestMenu);
-        this.checkIn = updateString(requestDTO.getCheckIn(), this.checkIn);
-        this.checkOut = updateString(requestDTO.getCheckOut(), this.checkOut);
-
-        if (category != null) {
-            this.category = category;
-        }
+    public void increaseViewCount() {
+        this.viewCount++;
     }
+
 
     private String updateString(String newValue, String oldValue) {
         return (newValue != null && !newValue.isEmpty()) ? newValue : oldValue;
     }
 
-    private <T> T updateValue(T newValue, T oldValue) {
+    public <T> T updateValue(T newValue, T oldValue) {
         return (newValue != null) ? newValue : oldValue;
     }
 
-    public void updateActiveState(PlaceStatus newStatus) {
-        this.status = newStatus;
+    public void updateActiveState(PlaceStatus status) {
+        this.status = status;
     }
-
 }

@@ -9,11 +9,14 @@ package com.multi.travel.domain.place.controller;
  */
 
 import com.multi.travel.common.ResponseDto;
-import com.multi.travel.domain.place.dto.*;
+import com.multi.travel.domain.place.dto.PlaceCreateReqDTO;
+import com.multi.travel.domain.place.dto.PlaceDetailResDTO;
+import com.multi.travel.domain.place.dto.PlaceNearbyResDTO;
+import com.multi.travel.domain.place.dto.PlaceUpdateReqDTO;
 import com.multi.travel.domain.place.enums.PlaceStatus;
+import com.multi.travel.domain.place.service.PlaceQueryService;
 import com.multi.travel.domain.place.service.PlaceService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,17 +31,26 @@ import java.util.Map;
 public class PlaceController {
 
     private final PlaceService placeService;
+    private final PlaceQueryService placeQueryService;
 
     @GetMapping("/places")
-    public ResponseEntity<ResponseDto> getPlaces(PlaceListReqDTO requestDTO) {
-        Page<PlaceListResDTO> response = placeService.getPlaces(requestDTO);
-        return ResponseEntity.ok(new ResponseDto(HttpStatus.OK, "장소 목록 조회 성공", response));
+    public ResponseEntity<ResponseDto> getPlaces(
+            @RequestParam(required = false) String keyword
+    ) {
+        return ResponseEntity.ok(
+                new ResponseDto(
+                        HttpStatus.OK,
+                        "장소 목록 조회",
+                        placeQueryService.getUnifiedList(keyword, null, null)
+                )
+        );
     }
 
-    @GetMapping("/places/{id}")
-    public ResponseEntity<ResponseDto> getPlaceById(@PathVariable Long id) {
-        PlaceDetailResDTO response = placeService.getPlace(id);
-        placeService.increaseViewCount(id);
+
+    @GetMapping("/places/{seedId}")
+    public ResponseEntity<ResponseDto> getPlaceById(@PathVariable Long seedId) {
+        PlaceDetailResDTO response = placeService.getPlace(seedId);
+        placeService.increaseViewCount(seedId);
         return ResponseEntity.ok(new ResponseDto(HttpStatus.OK, "장소 상세 조회 성공", response));
     }
 
