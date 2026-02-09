@@ -19,53 +19,55 @@ public interface UnifiedPlaceRepository extends Repository<Place, Long> {
 
     @Query(
             value = """
-                        SELECT 
-                            p.id,
-                            p.title,
-                            p.area_code     AS areaCode,
-                            p.content_type_id AS contentTypeId,
-                            'PLACE'         AS source
-                        FROM place p
-                        WHERE p.status = 'ACTIVE'
-                          AND (:keyword IS NULL OR p.title LIKE CONCAT('%', :keyword, '%'))
-                          AND (:areaCode IS NULL OR p.area_code = :areaCode)
-                          AND (:contentTypeId IS NULL OR p.content_type_id = :contentTypeId)
-                    
-                        UNION ALL
-                    
-                        SELECT
-                            s.id,
-                            s.title,
-                            s.area_code     AS areaCode,
-                            s.content_type_id AS contentTypeId,
-                            'SEED'          AS source
-                        FROM place_seed s
-                        WHERE s.status = 'COLLECTED'
-                          AND (:keyword IS NULL OR s.title LIKE CONCAT('%', :keyword, '%'))
-                          AND (:areaCode IS NULL OR s.area_code = :areaCode)
-                          AND (:contentTypeId IS NULL OR s.content_type_id = :contentTypeId)
-                    
-                        ORDER BY title
-                    """,
+            SELECT 
+                p.id                    AS placeId,
+                p.external_content_id   AS contentId,
+                p.title,
+                p.area_code             AS areaCode,
+                p.content_type_id       AS contentTypeId,
+                'PLACE'                 AS source
+            FROM place p
+            WHERE p.status = 'ACTIVE'
+              AND (:keyword IS NULL OR p.title LIKE CONCAT('%', :keyword, '%'))
+              AND (:areaCode IS NULL OR p.area_code = :areaCode)
+              AND (:contentTypeId IS NULL OR p.content_type_id = :contentTypeId)
+
+            UNION ALL
+
+            SELECT
+                NULL                    AS placeId,
+                s.content_id            AS contentId,
+                s.title,
+                s.area_code             AS areaCode,
+                s.content_type_id       AS contentTypeId,
+                'SEED'                  AS source
+            FROM place_seed s
+            WHERE s.status = 'COLLECTED'
+              AND (:keyword IS NULL OR s.title LIKE CONCAT('%', :keyword, '%'))
+              AND (:areaCode IS NULL OR s.area_code = :areaCode)
+              AND (:contentTypeId IS NULL OR s.content_type_id = :contentTypeId)
+
+            ORDER BY title
+        """,
             countQuery = """
-                        SELECT COUNT(*) FROM (
-                            SELECT p.id
-                            FROM place p
-                            WHERE p.status = 'ACTIVE'
-                              AND (:keyword IS NULL OR p.title LIKE CONCAT('%', :keyword, '%'))
-                              AND (:areaCode IS NULL OR p.area_code = :areaCode)
-                              AND (:contentTypeId IS NULL OR p.content_type_id = :contentTypeId)
-                    
-                            UNION ALL
-                    
-                            SELECT s.id
-                            FROM place_seed s
-                            WHERE s.status = 'COLLECTED'
-                              AND (:keyword IS NULL OR s.title LIKE CONCAT('%', :keyword, '%'))
-                              AND (:areaCode IS NULL OR s.area_code = :areaCode)
-                              AND (:contentTypeId IS NULL OR s.content_type_id = :contentTypeId)
-                        ) t
-                    """,
+            SELECT COUNT(*) FROM (
+                SELECT p.id
+                FROM place p
+                WHERE p.status = 'ACTIVE'
+                  AND (:keyword IS NULL OR p.title LIKE CONCAT('%', :keyword, '%'))
+                  AND (:areaCode IS NULL OR p.area_code = :areaCode)
+                  AND (:contentTypeId IS NULL OR p.content_type_id = :contentTypeId)
+
+                UNION ALL
+
+                SELECT s.id
+                FROM place_seed s
+                WHERE s.status = 'COLLECTED'
+                  AND (:keyword IS NULL OR s.title LIKE CONCAT('%', :keyword, '%'))
+                  AND (:areaCode IS NULL OR s.area_code = :areaCode)
+                  AND (:contentTypeId IS NULL OR s.content_type_id = :contentTypeId)
+            ) t
+        """,
             nativeQuery = true
     )
     Page<UnifiedPlaceView> searchUnified(

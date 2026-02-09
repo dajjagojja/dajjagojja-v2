@@ -1,6 +1,5 @@
 package com.multi.travel.domain.place.dto;
 
-import com.multi.travel.domain.place.enums.PlaceItemType;
 import com.multi.travel.domain.place.repository.UnifiedPlaceView;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,10 +19,13 @@ import lombok.Getter;
 @Builder
 public class PlaceListItemDto {
 
-    private Long id;
+    private Long placeId;
+    private Long contentId;
+
     private String title;
     private Integer areaCode;
     private Integer contentTypeId;
+
     private String source;
     private String imageUrl;
 
@@ -32,12 +34,13 @@ public class PlaceListItemDto {
             String placeholderUrl
     ) {
         return PlaceListItemDto.builder()
-                .id(view.getId())
+                .placeId(view.getPlaceId())
+                .contentId(view.getContentId())
                 .title(view.getTitle())
                 .areaCode(view.getAreaCode())
                 .contentTypeId(view.getContentTypeId())
+                .source(view.getSource())
                 .imageUrl(placeholderUrl)
-                .source(view.getSource()) // PLACE / SEED
                 .build();
     }
 }

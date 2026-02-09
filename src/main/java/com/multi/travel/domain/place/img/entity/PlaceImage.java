@@ -9,8 +9,12 @@ package com.multi.travel.domain.place.img.entity;
  */
 
 import com.multi.travel.domain.place.entity.Place;
+import com.multi.travel.domain.place.img.PlaceImageSource;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -18,9 +22,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "tb_plc_img")
+@Table(name = "place_image")
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -31,18 +34,24 @@ public class PlaceImage {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "place_id")
+    @JoinColumn(name = "place_id", nullable = false)
     private Place place;
 
-    @Column(name = "image_url", nullable = false)
+    @Column(name = "image_url", nullable = false, length = 500)
     private String imageUrl;
 
-    @Column(name = "is_main")
+    @Column(name = "is_main", nullable = false)
     private boolean isMain;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "source", nullable = false)
+    private PlaceImageSource source;
 
     @CreatedDate
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
+    public void setMain(boolean tf) {
+        this.isMain = tf;
+    }
 }

@@ -10,7 +10,6 @@ package com.multi.travel.domain.place.controller;
 
 import com.multi.travel.common.ResponseDto;
 import com.multi.travel.domain.place.dto.PlaceCreateReqDTO;
-import com.multi.travel.domain.place.dto.PlaceDetailResDTO;
 import com.multi.travel.domain.place.dto.PlaceNearbyResDTO;
 import com.multi.travel.domain.place.dto.PlaceUpdateReqDTO;
 import com.multi.travel.domain.place.enums.PlaceStatus;
@@ -95,12 +94,23 @@ public class PlaceController {
     }
 
 
-    @GetMapping("/places/{seedId}")
-    public ResponseEntity<ResponseDto> getPlaceById(@PathVariable Long seedId) {
-        PlaceDetailResDTO response = placeService.getPlace(seedId);
-        placeService.increaseViewCount(seedId);
-        return ResponseEntity.ok(new ResponseDto(HttpStatus.OK, "장소 상세 조회 성공", response));
+    @Operation(
+            summary = "장소 상세 조회",
+            description = "Place / Seed 데이터를 구분하여 단일 장소의 상세 정보를 조회합니다."
+    )
+    @GetMapping("/places/{contentId}")
+    public ResponseEntity<ResponseDto> getPlaceDetail(
+            @PathVariable Long contentId
+    ) {
+        return ResponseEntity.ok(
+                new ResponseDto(
+                        HttpStatus.OK,
+                        "장소 상세 조회",
+                        placeQueryService.getPlaceDetailByContentId(contentId)
+                )
+        );
     }
+
 
     @GetMapping("/places/nearby")
     public ResponseEntity<ResponseDto> getPlacesNearby(

@@ -10,9 +10,10 @@ package com.multi.travel.domain.place.repository;
 
 
 public interface UnifiedPlaceView {
-    Long getId();
+    Long getPlaceId();
+    Long getContentId();
     String getTitle();
     Integer getAreaCode();
     Integer getContentTypeId();
-    String getSource(); // PLACE | SEED
+    String getSource();      // PLACE / SEED
 }

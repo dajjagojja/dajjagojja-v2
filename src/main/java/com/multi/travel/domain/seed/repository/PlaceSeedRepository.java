@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Please explain the class!!!
@@ -55,4 +56,6 @@ public interface PlaceSeedRepository extends JpaRepository<PlaceSeed, Long> {
             @Param("contentTypeId") Integer contentTypeId,
             @Param("collected") SeedStatus collected
     );
+
+    Optional<PlaceSeed> findByContentId(Long contentId);
 }
