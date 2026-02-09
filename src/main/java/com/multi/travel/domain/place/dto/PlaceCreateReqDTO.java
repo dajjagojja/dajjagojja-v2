@@ -49,7 +49,6 @@ public class PlaceCreateReqDTO {
     public Place toEntity(Category category) {
         return Place.builder()
                 .contentId(contentId)
-                .placeType(placeType)
                 .title(title)
                 .address(address)
                 .tel(tel)

@@ -1,17 +1,12 @@
 package com.multi.travel.domain.place.service;
 
 import com.multi.travel.domain.place.dto.PlaceListItemDto;
-import com.multi.travel.domain.place.enums.PlaceStatus;
-import com.multi.travel.domain.place.repository.PlaceRepository;
-import com.multi.travel.domain.seed.enums.SeedStatus;
-import com.multi.travel.domain.seed.repository.PlaceSeedRepository;
+import com.multi.travel.domain.place.repository.UnifiedPlaceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * Please explain the class!!!
@@ -29,30 +24,17 @@ public class PlaceQueryService {
     @Value("${app.place.placeholder-url}")
     private String placeholderUrl;
 
-    private final PlaceRepository placeRepository;
-    private final PlaceSeedRepository placeSeedRepository;
+    private final UnifiedPlaceRepository unifiedPlaceRepository;
 
-    public List<PlaceListItemDto> getUnifiedList(
+    public Page<PlaceListItemDto> getUnifiedList(
             String keyword,
             Integer areaCode,
-            Integer contentTypeId
+            Integer contentTypeId,
+            Pageable pageable
     ) {
 
-        List<PlaceListItemDto> places =
-                placeRepository.searchForList(keyword, areaCode, contentTypeId, PlaceStatus.ACTIVE)
-                        .stream()
-                        .map(p -> PlaceListItemDto.fromPlace(p, placeholderUrl))
-                        .toList();
-
-        List<PlaceListItemDto> seeds =
-                placeSeedRepository.searchForList(keyword, areaCode, contentTypeId, SeedStatus.COLLECTED)
-                        .stream()
-                        .map(s -> PlaceListItemDto.fromSeed(s, placeholderUrl))
-                        .toList();
-
-        return Stream.concat(places.stream(), seeds.stream())
-                .sorted(Comparator.comparing(PlaceListItemDto::getTitle))
-                .toList();
-
+        return unifiedPlaceRepository
+                .searchUnified(keyword, areaCode, contentTypeId, pageable)
+                .map(v -> PlaceListItemDto.fromUnified(v, placeholderUrl));
     }
 }

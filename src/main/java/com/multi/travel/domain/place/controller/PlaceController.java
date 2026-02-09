@@ -16,7 +16,12 @@ import com.multi.travel.domain.place.dto.PlaceUpdateReqDTO;
 import com.multi.travel.domain.place.enums.PlaceStatus;
 import com.multi.travel.domain.place.service.PlaceQueryService;
 import com.multi.travel.domain.place.service.PlaceService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,15 +38,58 @@ public class PlaceController {
     private final PlaceService placeService;
     private final PlaceQueryService placeQueryService;
 
+    @Operation(
+            summary = "장소 목록 조회",
+            description = """
+                    Place + Seed 데이터를 통합하여 장소 목록을 조회합니다.
+                    
+                    - keyword: 장소명 기준 검색
+                    - areaCode: 지역 코드 필터
+                    - contentTypeId: 관광 콘텐츠 타입 필터
+                    - 페이지네이션 및 정렬 지원 (page, size, sort)
+                    """
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "장소 목록 조회 성공"
+    )
     @GetMapping("/places")
     public ResponseEntity<ResponseDto> getPlaces(
-            @RequestParam(required = false) String keyword
+
+            @Parameter(
+                    description = "검색 키워드 (장소명 기준)",
+                    example = "서울"
+            )
+            @RequestParam(required = false)
+            String keyword,
+
+            @Parameter(
+                    description = "지역 코드 (예: 1=서울, 2=인천, 31=경기)",
+                    example = "1"
+            )
+            @RequestParam(required = false)
+            Integer areaCode,
+
+            @Parameter(
+                    description = "콘텐츠 타입 ID (예: 12=관광지, 32=숙박시설, 39=음식점)",
+                    example = "12"
+            )
+            @RequestParam(required = false)
+            Integer contentTypeId,
+
+            @ParameterObject
+            Pageable pageable
     ) {
         return ResponseEntity.ok(
                 new ResponseDto(
                         HttpStatus.OK,
                         "장소 목록 조회",
-                        placeQueryService.getUnifiedList(keyword, null, null)
+                        placeQueryService.getUnifiedList(
+                                keyword,
+                                areaCode,
+                                contentTypeId,
+                                pageable
+                        )
                 )
         );
     }

@@ -12,7 +12,6 @@ import com.multi.travel.domain.category.entity.Category;
 import com.multi.travel.domain.place.dto.PlaceUpdateReqDTO;
 import com.multi.travel.domain.place.enums.PlaceDataSource;
 import com.multi.travel.domain.place.enums.PlaceStatus;
-import com.multi.travel.domain.place.enums.PlaceType;
 import com.multi.travel.domain.place.img.entity.PlaceImage;
 import com.multi.travel.domain.seed.entity.PlaceSeed;
 import jakarta.persistence.*;
@@ -28,7 +27,7 @@ import java.util.List;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "tb_plc")
+@Table(name = "place")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -51,10 +50,6 @@ public class Place {
     @Column(name = "area_code", nullable = false)
     private Integer areaCode;
 
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "place_type")
-    private PlaceType placeType;
 
     @Column(nullable = false)
     private String title;

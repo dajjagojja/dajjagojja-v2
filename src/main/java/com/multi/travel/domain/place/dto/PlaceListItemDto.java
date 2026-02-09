@@ -1,12 +1,10 @@
 package com.multi.travel.domain.place.dto;
 
-import com.multi.travel.domain.place.entity.Place;
 import com.multi.travel.domain.place.enums.PlaceItemType;
-import com.multi.travel.domain.seed.entity.PlaceSeed;
+import com.multi.travel.domain.place.repository.UnifiedPlaceView;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-
-import java.math.BigDecimal;
 
 /**
  * Please explain the class!!!
@@ -19,44 +17,27 @@ import java.math.BigDecimal;
 
 @Getter
 @AllArgsConstructor
+@Builder
 public class PlaceListItemDto {
 
     private Long id;
-    private PlaceItemType type; // PLACE / SEED
     private String title;
-    private BigDecimal latitude;
-    private BigDecimal longitude;
-    private String thumbnailUrl;
+    private Integer areaCode;
+    private Integer contentTypeId;
+    private String source;
+    private String imageUrl;
 
-    public static PlaceListItemDto fromPlace(
-            Place place,
+    public static PlaceListItemDto fromUnified(
+            UnifiedPlaceView view,
             String placeholderUrl
     ) {
-        return new PlaceListItemDto(
-                place.getId(),
-                PlaceItemType.PLACE,
-                place.getTitle(),
-                place.getLatitude(),
-                place.getLongitude(),
-                place.getMainImage() != null
-                        ? place.getMainImage().getImageUrl()
-                        : placeholderUrl
-        );
-    }
-
-    public static PlaceListItemDto fromSeed(
-            PlaceSeed seed,
-            String placeholderUrl
-    ) {
-        return new PlaceListItemDto(
-                seed.getId(),
-                PlaceItemType.SEED,
-                seed.getTitle(),
-                seed.getLatitude(),
-                seed.getLongitude(),
-                seed.getThumbnailUrl() != null
-                        ? seed.getThumbnailUrl()
-                        : placeholderUrl
-        );
+        return PlaceListItemDto.builder()
+                .id(view.getId())
+                .title(view.getTitle())
+                .areaCode(view.getAreaCode())
+                .contentTypeId(view.getContentTypeId())
+                .imageUrl(placeholderUrl)
+                .source(view.getSource()) // PLACE / SEED
+                .build();
     }
 }
