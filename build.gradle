@@ -74,6 +74,12 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
 
     /* =====================================================
+     * HTML Parsing (LOD Crawling)
+     * ===================================================== */
+    implementation 'org.jsoup:jsoup:1.17.2'
+
+
+    /* =====================================================
      * Development & Testing
      * ===================================================== */
     developmentOnly 'org.springframework.boot:spring-boot-devtools'

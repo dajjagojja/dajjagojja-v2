@@ -49,17 +49,6 @@ public class PlaceService {
         return result.map(PlaceListResDTO::from);
     }
 
-    @Transactional(readOnly = true)
-    public PlaceDetailResDTO getPlace(Long id) {
-        Place place = placeRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
-                        "해당 장소를 찾을 수 없습니다. id=" + id
-                ));
-
-        return PlaceDetailResDTO.from(place);
-    }
-
     @Transactional
     public Long createPlace(PlaceCreateReqDTO requestDTO) {
 

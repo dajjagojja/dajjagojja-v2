@@ -13,3 +13,7 @@ springdoc:
 logging:
   level:
     root: INFO
+
+app:
+  place:
+    placeholder-url: /images/place/placeholder.jpg

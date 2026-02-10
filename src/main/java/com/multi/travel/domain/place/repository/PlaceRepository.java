@@ -10,6 +10,7 @@ package com.multi.travel.domain.place.repository;
 
 
 import com.multi.travel.domain.place.entity.Place;
+import com.multi.travel.domain.place.enums.PlaceStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,6 +19,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PlaceRepository extends JpaRepository<Place, Long> {
 
@@ -60,4 +62,20 @@ public interface PlaceRepository extends JpaRepository<Place, Long> {
     );
 
 
+    @Query("""
+    select p
+    from Place p
+    where p.status = :active
+      and (:keyword = '' or p.title like concat('%', :keyword, '%'))
+      and (:areaCode is null or p.areaCode = :areaCode)
+      and (:contentTypeId is null or p.contentTypeId = :contentTypeId)
+    """)
+    List<Place> searchForList(
+            @Param("keyword") String keyword,
+            @Param("areaCode") Integer areaCode,
+            @Param("contentTypeId") Integer contentTypeId,
+            @Param("active") PlaceStatus active
+    );
+
+    Optional<Place> findByContentId(Long contentId);
 }
